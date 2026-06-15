@@ -1,0 +1,79 @@
+{
+  "test_metrics": {
+    "test_f1": 0.506,
+    "test_precision": 0.6364,
+    "test_recall": 0.42,
+    "test_auc_roc": 0.9744,
+    "test_pr_auc": 0.7195,
+    "tp": 21,
+    "fp": 12,
+    "fn": 29,
+    "tn": 1665,
+    "fpr": 0.0072,
+    "threshold": 0.9161
+  },
+  "val_f1": {
+    "f1": 0.7956989247311828,
+    "threshold": 0.9161306532663317
+  },
+  "local_metrics": [
+    {
+      "dept": "it_admin",
+      "n_train": 1426,
+      "n_pos": 20,
+      "xgb_val_f1": 1.0,
+      "lgb_val_f1": 1.0
+    },
+    {
+      "dept": "retail_banking",
+      "n_train": 2410,
+      "n_pos": 60,
+      "xgb_val_f1": 1.0,
+      "lgb_val_f1": 1.0
+    },
+    {
+      "dept": "compliance",
+      "n_train": 2010,
+      "n_pos": 96,
+      "xgb_val_f1": 0.973,
+      "lgb_val_f1": 0.973
+    },
+    {
+      "dept": "hr",
+      "n_train": 1210,
+      "n_pos": 57,
+      "xgb_val_f1": 0.9565,
+      "lgb_val_f1": 0.9565
+    }
+  ],
+  "meta_learner_weights": {
+    "compliance_xgb": 3.0418,
+    "compliance_lgb": -0.2916,
+    "hr_xgb": -0.8625,
+    "hr_lgb": 2.175,
+    "it_admin_xgb": 1.0251,
+    "it_admin_lgb": 2.9056,
+    "retail_banking_xgb": 1.5326,
+    "retail_banking_lgb": 1.5072
+  },
+  "privacy_report": {
+    "data_shared": "prediction_probabilities_only",
+    "raw_data_shared": 0,
+    "model_parameters_shared": 0,
+    "gradients_shared": 0,
+    "values_shared": 13776,
+    "bytes_shared": 55104,
+    "departments_participating": 4,
+    "compliance": [
+      "DPDPA",
+      "data_minimization",
+      "purpose_limitation",
+      "storage_limitation"
+    ]
+  },
+  "comparison": {
+    "centralized_lgb_f1": 0.9495,
+    "centralized_xgb_f1": 0.9388,
+    "fedavg_mlp_f1": 0.5263
+  }
+}
