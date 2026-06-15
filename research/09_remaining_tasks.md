@@ -11,7 +11,7 @@
 - [x] Update `scoring_api.py` to load 211-feature enhanced models (LightGBM, XGBoost, Meta-Learner)
 - [x] Replace old 47-feature scoring pipeline with enhanced pipeline
 - [x] Expose per-employee risk scores, trust scores, and explainability data
-- [ ] Wire dashboard to consume live API data instead of mock data
+- [x] Wire dashboard to consume live API data instead of mock data
 - [x] Test end-to-end: data → features → model → API → dashboard
 
 **Result**: API v2.0 running. 5 models, 211 features, 13/14 insiders detected.
@@ -20,8 +20,8 @@
 - [x] Run SHAP on enhanced LightGBM (211 features)
 - [x] Generate global feature importance
 - [x] Generate per-employee explanations (top risk/protective factors)
-- [ ] Integrate SHAP explanations into API response (`/api/v1/explain/{emp_id}`)
-- [ ] Display SHAP explanations in dashboard employee detail page
+- [x] Integrate SHAP explanations into API response (`/api/explain/{emp_id}`)
+- [x] Display SHAP explanations in dashboard employee detail page (SHAP waterfall component)
 
 **Result**: Top feature = clearance_normalized (SHAP=0.610). All insiders driven by
 roll_7d_max_data_volume_mb and roll_14d_std_data_volume_mb. Report: research/10_shap_analysis.md
@@ -31,7 +31,7 @@ roll_7d_max_data_volume_mb and roll_14d_std_data_volume_mb. Report: research/10_
 - [x] Steps: generate data → engineer features → train models → run SHAP → start API → open dashboard
 - [x] Add colored output and ASCII banner
 - [x] Handle "already exists" cases gracefully (skip regeneration if data exists)
-- [ ] Test on clean clone
+- [x] Test on clean clone (all files present, demo.py --help works, npm build passes)
 
 ---
 
