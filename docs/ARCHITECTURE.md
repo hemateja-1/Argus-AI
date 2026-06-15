@@ -25,14 +25,16 @@ Argus AI follows a **modular, layered architecture** with clear separation betwe
 │  ┌──────────────┐   ┌──────────────┐   ┌──────────────────┐   │
 │  │ Data Loader   │   │ Preprocessor │   │ Feature Engineer │   │
 │  │              │   │              │   │                  │   │
-│  │ • cert_loader │──▶│ • Clean      │──▶│ • 47 features   │   │
-│  │ • synth_gen   │   │ • Validate   │   │ • Temporal       │   │
-│  │ • schemas     │   │ • Normalize  │   │ • Access volume  │   │
-│  └──────────────┘   └──────────────┘   │ • Device/location│   │
-│                                         │ • Communication  │   │
-│                                         │ • Data movement  │   │
-│                                         │ • Behavioral     │   │
-│                                         │ • Sequence        │   │
+│  │ • cert_loader │──▶│ • Clean      │──▶│ • 47 base     │   │
+│  │ • synth_gen   │   │ • Validate   │   │ • → 211       │   │
+│  │ • schemas     │   │ • Normalize  │   │   enhanced    │   │
+│  └──────────────┘   └──────────────┘   │ • Temporal     │   │
+│                                         │ • Volume       │   │
+│                                         │ • Device       │   │
+│                                         │ • Deltas       │   │
+│                                         │ • Rolling      │   │
+│                                         │ • Z-scores     │   │
+│                                         │ • Interactions │   │
 │                                         └────────┬─────────┘   │
 └──────────────────────────────────────────────────┼─────────────┘
                                                    │
@@ -151,15 +153,29 @@ Argus AI follows a **modular, layered architecture** with clear separation betwe
               ┌───────────┼───────────┐
               ▼                       ▼
 ┌──────────────────────┐  ┌──────────────────────┐
-│   FastAPI REST API    │  │  Next.js Dashboard    │
+│   FastAPI REST API    │  │  Next.js 16 Dashboard │
 │                      │  │                      │
-│ POST /score          │  │ • Trust Heatmap      │
-│ GET /employees       │  │ • Alert Queue        │
-│ GET /alerts          │  │ • Twin Comparison    │
-│ GET /twin/{emp_id}   │  │ • Privilege Decay    │
-│ GET /peers/{emp_id}  │  │ • Timeline View      │
-│ WS /stream           │  │ • Model Performance  │
-└──────────────────────┘  └──────────────────────┘
+│ GET /api/overview    │  │ • Command Center     │
+│ GET /api/employees   │  │ • Alert Queue        │
+│ GET /api/employee/id │  │ • Employee Detail    │
+│ GET /api/alerts      │  │ • Twin Comparison    │
+│ GET /api/analytics   │  │ • SHAP Waterfall     │
+│ GET /api/explain/id  │  │ • Privilege Decay    │
+│ GET /api/activity    │  │ • Model Analytics    │
+│                      │  │                      │
+└──────────────────────┘  └───────────┬──────────┘
+                                      │
+                                      ▼
+                          ┌──────────────────────┐
+                          │  Gemini AI Layer      │
+                          │                      │
+                          │ • Threat Reports     │
+                          │ • Recommendations    │
+                          │ • Interactive Chat   │
+                          │                      │
+                          │ POST /api/gemini     │
+                          │ (server-side proxy)  │
+                          └──────────────────────┘
 ```
 
 ---
@@ -172,9 +188,8 @@ Argus AI follows a **modular, layered architecture** with clear separation betwe
 
 | Source | Files | Records | Use |
 |--------|-------|---------|-----|
-| CERT r4.2 | logon.csv, email.csv, file.csv, device.csv, http.csv | ~32M events | Primary training & evaluation |
-| LANL | auth.txt | 700M+ events | Temporal login pattern supplement |
-| Synthetic Banking | Generated CSVs | ~1.8M events | Banking-specific demonstration |
+| Synthetic Banking | employees.csv, activity_log.csv, ground_truth.csv | 505K events, 200 employees | Primary training, evaluation, and demo |
+| CERT r4.2 | logon.csv, email.csv, file.csv, device.csv, http.csv | ~32M events | Methodology reference (scenario design) |
 
 #### Feature Engineering Pipeline (47 Features)
 

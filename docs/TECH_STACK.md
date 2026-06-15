@@ -88,8 +88,8 @@ Argus AI is built as a **two-tier application**: a Python ML backend (data pipel
 
 | Package | Version | Purpose | Justification |
 |---------|---------|---------|---------------|
-| **Next.js** | 14+ | React-based SSR/SSG framework | Best-in-class React framework. App router for modern patterns. |
-| **React** | 18+ | UI component library | Industry standard. Huge ecosystem. |
+| **Next.js** | 16.2 (Turbopack) | React-based SSR/SSG framework | Latest version with Turbopack for fast builds. Server-side API routes for Gemini proxy. |
+| **React** | 19.2 | UI component library | Latest concurrent features. Industry standard. |
 | **TypeScript** | 5.x | Type-safe JavaScript | Catch bugs early. Better IDE support. |
 
 ### Data Visualization
@@ -109,12 +109,17 @@ Argus AI is built as a **two-tier application**: a Python ML backend (data pipel
 | **CSS Custom Properties** | Design tokens (colors, spacing, typography) | Centralized theming. Easy dark/light mode. |
 | **Google Fonts (Inter)** | Modern typography | Clean, professional, excellent readability. |
 
+### AI Integration
+
+| Package | Version | Purpose | Justification |
+|---------|---------|---------|---------------|
+| **@google/genai** | Latest | Gemini 2.0 Flash Lite API client | AI-powered threat reports, recommendations, and analyst chat. Server-side only (key never reaches browser). |
+
 ### API Communication
 
 | Package | Version | Purpose | Justification |
 |---------|---------|---------|---------------|
-| **axios** | 1.x | HTTP client | Better error handling than fetch. Interceptors. |
-| **swr** or **react-query** | Latest | Data fetching with caching | Auto-refetch, caching, optimistic updates. |
+| **Native fetch** | Built-in | HTTP client for FastAPI backend | React 19 + Next.js 16 built-in fetch with AbortSignal timeout. No external dependency needed. |
 
 ### Utilities
 
@@ -217,9 +222,11 @@ ipywidgets>=8.0.0
 | Python | 3.11 | 3.11.9 | 3.12 also works, but some packages may lag |
 | PyTorch | 2.0 | 2.3.0 | CUDA 12.1 recommended for GPU |
 | scikit-learn | 1.5 | 1.5.1 | Isolation Forest API stable |
+| LightGBM | 4.0 | 4.5.0 | Primary model (F1=0.992) |
 | FastAPI | 0.110 | 0.115 | Pydantic v2 required |
-| Next.js | 14 | 14.2 | App router (not pages router) |
+| Next.js | 16 | 16.2.9 | App router + Turbopack |
 | Node.js | 18 | 20.x LTS | LTS recommended |
+| @google/genai | Latest | 1.x | Gemini 2.0 Flash Lite |
 
 ---
 
@@ -251,7 +258,7 @@ ipywidgets>=8.0.0
 
 ### ADR-7: LightGBM as Primary Supervised Model
 **Decision**: Use LightGBM (not just unsupervised IF + LSTM-AE) as the primary scorer.
-**Rationale**: With labeled insider data available (CERT r4.2 + synthetic), supervised GBDT outperforms unsupervised anomaly detection. LightGBM achieved F1=0.949 vs IF's F1=0.873. Training is fast (< 10s), and tree-based models handle the 211 features with mixed types naturally.
+**Rationale**: With labeled insider data available (synthetic), supervised GBDT outperforms unsupervised anomaly detection. LightGBM achieved F1=0.992 with 211 enhanced features vs IF's F1=0.873 baseline. Training is fast (<10s), and tree-based models handle the 211 features with mixed types naturally.
 
 ### ADR-8: SHAP TreeExplainer over LIME
 **Decision**: Use SHAP with TreeExplainer for model explanations.
@@ -264,3 +271,7 @@ ipywidgets>=8.0.0
 ### ADR-10: Meta-Learner Stacking over Simple Averaging
 **Decision**: Use a logistic regression meta-learner to combine base model predictions.
 **Rationale**: Simple averaging treats all models equally. Meta-learner learns optimal weights: LightGBM gets highest weight (best individual F1), LSTM-AE provides complementary temporal signal. Cross-validated to avoid overfitting.
+
+### ADR-11: Gemini AI for Analyst-Facing Explanations
+**Decision**: Integrate Google Gemini 2.0 Flash Lite for natural language threat analysis.
+**Rationale**: SHAP provides quantitative feature-level explanations, but analysts need qualitative context — "why does this pattern matter for a recruiter in HR?" Gemini converts SHAP data + employee context into structured threat assessments, response recommendations, and interactive Q&A. The API key stays server-side via Next.js API routes, so it never reaches the browser. Flash Lite is chosen for speed (<2s generation) and cost efficiency.

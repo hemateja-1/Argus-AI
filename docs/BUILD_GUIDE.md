@@ -436,12 +436,31 @@ npm run dev
 
 ### Enhanced Pipeline (v2.0) — Added Post-Initial Build
 
+- [x] Deep feature investigation (dead features, correlations)
 - [x] Enhanced feature engineering (47 → 211 features)
-- [x] LightGBM/XGBoost supervised training (F1=0.949)
+- [x] LightGBM/XGBoost supervised training (F1=0.992)
 - [x] Meta-learner stacking ensemble
 - [x] SHAP TreeExplainer integration
 - [x] Federated stacking (privacy-compliant alternative)
-- [x] 5-fold stratified cross-validation (F1=0.935 ± 0.022)
-- [x] Feature/model ablation study
+- [x] 5-fold stratified cross-validation (F1=0.893 ± 0.055)
+- [x] Feature/model ablation study (rolling windows most critical: -8.3% F1 drop)
+- [x] Adversarial robustness testing (7 evasion strategies)
+- [x] Latency benchmarks (API <200ms, batch >150K/sec)
 - [x] SHAP waterfall dashboard component
 - [x] `/api/explain/{emp_id}` endpoint
+- [x] Gemini AI integration (threat reports, recommendations, chat)
+- [x] Mock data alignment with ground_truth.csv (14 insiders, 6 scenarios)
+- [x] Data pipeline documentation (research/15_data_pipeline.md)
+- [x] Updated README and documentation
+
+### Dashboard Setup (Gemini AI)
+
+```bash
+cd dashboard
+npm install
+cp .env.example .env.local
+# Edit .env.local → add GEMINI_API_KEY from Google AI Studio
+npm run dev
+```
+
+> `.env.local` is gitignored. The API key stays server-side via `/api/gemini` route.
