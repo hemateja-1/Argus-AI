@@ -984,3 +984,12 @@ a:hover {
 .font-semibold { font-weight: 600; }
 .font-bold { font-weight: 700; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ─── Gemini AI Spinner ─── */
+.spin {
+  animation: spin-anim 1s linear infinite;
+}
+@keyframes spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

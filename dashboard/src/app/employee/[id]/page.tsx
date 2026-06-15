@@ -2,6 +2,7 @@
 
 import { use } from 'react';
 import Sidebar from '@/components/Sidebar';
+import GeminiReport from '@/components/GeminiReport';
 import {
   getEmployee, getAlertsByEmployee, getTrustColor,
   privilegeDecayTimeline, sampleTwinProfile, trustScoreHistory, activityFeed,
@@ -347,6 +348,33 @@ export default function EmployeeDetailPage({ params }: { params: Promise<{ id: s
               </div>
             </div>
           </div>
+
+          {/* Gemini AI Analysis */}
+          <GeminiReport
+            employeeData={{
+              emp_id: id,
+              name: empName,
+              department: empDept,
+              role: empRole,
+              branch: empBranch,
+              clearance_level: empClearance,
+              trust_score: trustScore,
+              risk_score: riskScore,
+            }}
+            shapData={shapData}
+            alertData={empAlerts?.[0] ? {
+              severity: empAlerts[0].severity,
+              matched_chain: empAlerts[0].intentChain?.pattern || '',
+              chain_confidence: empAlerts[0].intentChain?.confidence || 0,
+              chain_signals: empAlerts[0].intentChain?.matchedSteps || [],
+              top_features: empAlerts[0].riskFactors?.map((rf: { factor: string; detail: string; impact: number }) => ({
+                feature: rf.factor,
+                zscore: rf.impact,
+                value: rf.impact,
+              })) || [],
+              summary: empAlerts[0].riskFactors?.map((rf: { detail: string }) => rf.detail).join('; ') || '',
+            } : null}
+          />
 
           {/* Behavioral Genome Deviation */}
           <div className="card mt-24">

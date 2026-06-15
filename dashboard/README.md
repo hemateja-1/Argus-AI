@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Argus AI — Security Dashboard
 
-## Getting Started
+Next.js 16 dashboard for the Argus insider threat detection platform.
 
-First, run the development server:
+## Setup
+
+### 1. Install dependencies
+
+```bash
+cd dashboard
+npm install
+```
+
+### 2. Configure environment
+
+Create a `.env.local` file in the `dashboard/` directory:
+
+```env
+# Gemini AI Integration (Google AI Studio)
+GEMINI_API_KEY=your_google_ai_studio_api_key_here
+```
+
+> **Note**: `.env.local` is gitignored and will NOT be committed. Each developer needs their own key from [Google AI Studio](https://aistudio.google.com/).
+
+### 3. Start the API server (optional, for live data)
+
+```bash
+# From project root
+python -m argus.api.scoring_api
+```
+
+### 4. Run the dashboard
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Command Center** — Real-time trust score heatmap for all 200 employees
+- **Alerts** — Kill chain analysis with severity classification
+- **Employees** — Sortable, searchable employee directory with live risk scores
+- **Employee Detail** — Digital twin comparison, SHAP explainability, privilege decay timeline
+- **Gemini AI Analysis** — AI-powered threat reports, recommendations, and interactive Q&A
+- **Analytics** — Model performance metrics, feature importance, department stats
+- **Digital Twin** — Behavioral genome deviation analysis
 
-## Learn More
+## Architecture
 
-To learn more about Next.js, take a look at the following resources:
+```
+dashboard/
+  src/
+    app/
+      api/gemini/route.ts    — Server-side Gemini API proxy (key stays secret)
+      employee/[id]/page.tsx — Employee detail with AI analysis
+      alerts/page.tsx        — Alert center
+      analytics/page.tsx     — Model analytics
+    components/
+      GeminiReport.tsx       — AI report/chat component
+      Sidebar.tsx            — Navigation
+    lib/
+      api.ts                 — FastAPI client
+      hooks.ts               — React hooks for live data
+      mockData.ts            — Fallback mock data
+  .env.local                 — API keys (gitignored)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## AI Features (Gemini Integration)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The dashboard integrates **Gemini 2.0 Flash Lite** for:
 
-## Deploy on Vercel
+1. **Threat Reports** — AI-generated threat assessment for any employee, explaining SHAP factors in plain English
+2. **Response Recommendations** — Prioritized action items with timelines and RBI compliance notes
+3. **Interactive Q&A** — Ask questions about any employee's behavior in natural language
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All Gemini calls go through a Next.js API route (`/api/gemini`) so the API key stays server-side.

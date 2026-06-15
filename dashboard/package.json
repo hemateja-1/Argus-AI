@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@google/genai": "^2.8.0",
     "chart.js": "^4.5.1",
     "date-fns": "^4.4.0",
     "framer-motion": "^12.40.0",
