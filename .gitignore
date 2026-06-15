@@ -32,8 +32,11 @@ desktop.ini
 # Data (large files — download separately)
 data/cert_r4.2/
 data/lanl/
+data/processed/
 *.csv
+*.npy
 !data/synthetic/.gitkeep
+!data/processed/.gitkeep
 
 # Model artifacts (too large for git)
 models/*.pt
